@@ -201,19 +201,12 @@ class PracticeController extends Controller {
     }
 
     public function getEx1() {
+        return 'Added book.';
         // Use the QueryBuilder to get all the books
-        $books = \DB::table('books')->get(); // Remember to put the '/' in front of DB
+        //$books = \DB::table('books')->get(); // Remember to put the '/' in front of DB
 
         // Output the results
-        foreach ($books as $book) {
-            echo $book->title.'<br>';
-        }
-
-        // Use the QueryBuilder to get all the books where author is like "%Scott%"
-        //$books = \DB::table('books')->where('author', 'LIKE', '%Scott%')->get();
-
-        // Output the results
-        //foreach($books as $book) {
+        //foreach ($books as $book) {
         //    echo $book->title.'<br>';
         //}
     }
