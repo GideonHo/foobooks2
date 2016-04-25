@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests;
+use App\Book;
 
 class BookController extends Controller {
 
@@ -42,18 +44,49 @@ class BookController extends Controller {
             'purchase_link' => 'required|url',
         ]);
 
-        // If the code makes it here, you can assume the validation passed
-        $book = new \App\Book();
-        $book->title = $request->title;
-        $book->author = $request->author;
-        $book->published = $request->published;
-        $book->cover = $request->cover;
-        $book->purchase_link = $request->purchase_link;
-        $book->save();
+        # If the code makes it here, you can assume the validation passed
+        //$book = new \App\Book();
+        //$book->title = $request->title;
+        //$book->author = $request->author;
+        //$book->published = $request->published;
+        //$book->cover = $request->cover;
+        //$book->purchase_link = $request->purchase_link;
+        //$book->save();
+
+        # Mass Assignment
+        $data = $request->only('title','author','published','cover','purchase_link');
+        
+        # One way to add the data
+        #$book = new \App\Book($data);
+        #$book->save();
+        
+        # An alternative way to add the data
+        \App\Book::create($data);
 
         \Session::flash('flash_message','Your book has been added.');
 
         // Then you'd give the user some sort of confirmation:
         return redirect('/books');
+    }
+
+    public function getEdit($id){
+        $book = \App\Book::find($id);
+        return view('books.edit')->with('book',$book);
+    }
+
+    public function postEdit(Request $request){
+        $book = \App\Book::find($request->id);
+
+        $book->title = $request->title;
+        $book->author = $request->author;
+        $book->cover = $request->cover;
+        $book->published = $request->published;
+        $book->purchase_link = $request->purchase_link;
+
+        $book->save();
+
+        return 'Book was saved';
+        #\Session::flash('flash_message','Your changes were saved');
+        #return redirect('/books/edit/'.$request->id);
     }
 }

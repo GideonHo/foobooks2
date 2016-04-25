@@ -19,12 +19,12 @@ Route::get('/', 'BookController@getIndex');
 Route::get('/books', 'BookController@getIndex');
 Route::get('/books/create', 'BookController@getCreate');
 Route::post('/books/create', 'BookController@postCreate');
+Route::get('/books/edit/{id?}', 'BookController@getEdit');
+Route::post('/books/edit', 'BookController@postEdit');
 Route::get('/books/show/{title?}', 'BookController@getShow');
 Route::get('/books/{category}', function($category) {
         return 'Here are all the books in the category of '.$category;
 });
-Route::get('/book/edit/{id?}', 'BookController@getEdit');
-Route::post('/book/edit', 'BookController@postEdit');
 
 Route::get('/debug', function() {
 
