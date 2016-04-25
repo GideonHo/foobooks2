@@ -5,31 +5,85 @@
 @stop
 
 @section('content')
+    <h1>Add a new book</h1>
 
-  <h1>Add a new book</h1>
+    <form method='POST' action='/books/create'>
 
-  <form method='POST' action='/books/create'>
-      {{ csrf_field() }}
-      Title: <input type='text' name='title'><br>
-        @if($errors->get('title'))
-            <ul>
-                @foreach($errors->get('title') as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        @endif
-      Name: <input type='text' name='name'><br>
-      Username: <input type='text' name='username'><br>
-      Password: <input type='text' name='password'><br>
-      <input type='submit' value='Submit'>
-  </form>
+        {{ csrf_field() }}
 
-  @if(count($errors) > 0)
-    <ul>
-        @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-  @endif
+        <div class='form-group'>
+           <label>Title:</label>
+            <input
+                type='text'
+                id='title'
+                name='title'
+                value='{{ old('title','Green Eggs and Ham') }}'
+            >
+           <div class='error'>{{ $errors->first('title') }}</div>
+        </div>
 
+        <div class='form-group'>
+           <label>Author:</label>
+           <input
+               type='text'
+               id='author'
+               name='author'
+               value='{{ old('author','Dr. Seuss') }}'
+           >
+           <div class='error'>{{ $errors->first('author') }}</div>
+        </div>
+
+        <div class='form-group'>
+           <label>Published Year (YYYY):</label>
+           <input
+               type='text'
+               id='published'
+               name='published'
+               value='{{ old('published','1960') }}'
+           >
+           <div class='error'>{{ $errors->first('Published') }}</div>
+        </div>
+
+        <div class='form-group'>
+           <label>URL of cover image:</label>
+           <input
+               type='text'
+               id='cover'
+               name='cover'
+               value='{{ old('cover','http://prodimage.images-bn.com/pimages/9780394800165_p0_v4_s192x300.jpg') }}'
+           >
+           <div class='error'>{{ $errors->first('cover') }}</div>
+        </div>
+
+        <div class='form-group'>
+           <label>URL to purchase this book:</label>
+           <input
+               type='text'
+               id='purchase_link'
+               name='purchase_link'
+               value='{{ old('purchase_link','http://www.barnesandnoble.com/w/green-eggs-and-ham-dr-seuss/1100170349?ean=9780394800165') }}'
+           >
+           <div class='error'>{{ $errors->first('purchase_link') }}</div>
+        </div>
+
+        <div class='form-instructions'>
+            All fields are required
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add book</button>
+
+        {{--
+        <ul class=''>
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+        --}}
+
+        <div class='error'>
+            @if(count($errors) > 0)
+                Please correct the errors above and try again.
+            @endif
+        </div>
+    </form>
 @stop

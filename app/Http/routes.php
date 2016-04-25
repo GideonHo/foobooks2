@@ -11,9 +11,24 @@
 |
 */
 
+for($i = 0; $i <= 100; $i++) {
+    Route::get("/practice/ex".$i, "PracticeController@getEx".$i);
+}
+
+Route::get('/', 'BookController@getIndex');
+Route::get('/books', 'BookController@getIndex');
+Route::get('/books/create', 'BookController@getCreate');
+Route::post('/books/create', 'BookController@postCreate');
+Route::get('/books/show/{title?}', 'BookController@getShow');
+Route::get('/books/{category}', function($category) {
+        return 'Here are all the books in the category of '.$category;
+});
+Route::get('/book/edit/{id?}', 'BookController@getEdit');
+Route::post('/book/edit', 'BookController@postEdit');
+
 Route::get('/debug', function() {
 
-    echo '<pre>';
+    echo '<pre>';	
 
     echo '<h1>Environment</h1>';
     echo App::environment().'</h1>';
@@ -58,16 +73,4 @@ Route::get('/practice', function() {
 
     return 'Practice';
 
-});
-
-Route::get('/books', 'BookController@getIndex');
-Route::get('/books/create', 'BookController@getCreate');
-Route::post('/books/create', 'BookController@postCreate');
-Route::get('/books/show/{title?}', 'BookController@getShow');
-Route::get('/books/{category}', function($category) {
-        return 'Here are all the books in the category of '.$category;
-});
-
-Route::get('/', function () {
-    return view('welcome');
 });
