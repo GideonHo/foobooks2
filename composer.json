@@ -8,7 +8,9 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
         "barryvdh/laravel-debugbar": "^2.2",
-        "nesbot/carbon": "^1.21"
+        "nesbot/carbon": "^1.21",
+        "google/apiclient": "2.0.*@dev",
+        "guzzlehttp/guzzle": "6.2"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

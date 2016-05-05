@@ -14,8 +14,8 @@
 
 </head>
 <body>
-    @if(Session::get('flash_message')!=null)
-        <div class='flash_message'>{{Session::get('flash_message')}}</div>
+    @if(Session::get('message')!=null)
+        <div class='flash_message'>{{Session::get('message')}}</div>
     @endif
 
     <header>
@@ -24,6 +24,20 @@
         style='width:300px'
         alt='Foobooks Logo'>
     </header>
+
+    <nav>
+        <ul>
+            @if(Auth::check())
+                <li><a href='/'>Home</a></li>
+                <li><a href='/books/create'>Add a book</a></li>
+                <li><a href='/logout'>Log out</a></li>
+            @else
+                <li><a href='/'>Home</a></li>
+                <li><a href='/login'>Log in</a></li>
+                <li><a href='/register'>Register</a></li>
+            @endif
+        </ul>
+    </nav>
 
     <section>
         {{-- Main page content will be yielded here --}}

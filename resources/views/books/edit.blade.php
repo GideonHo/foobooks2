@@ -26,14 +26,15 @@
         </div>
 
         <div class='form-group'>
-           <label>Author:</label>
-            <input
-                type='text'
-                id='author'
-                name='author'
-                value='{{ $book->author }}'
-            >
-           <div class='error'>{{ $errors->first('author') }}</div>
+            <label for='author_id'>* Author:</label>
+            <select id='author_id' name='author_id'>
+                @foreach($authors_for_dropdown as $author_id => $author_name)
+                     <option value='{{$author_id}}' {{ ($book->author_id == $author_id) ? 'SELECTED' : '' }}>
+                         {{$author_name}}
+                     </option>
+                 @endforeach
+            </select>
+            <div class='error'>{{ $errors->first('author') }}</div>
         </div>
 
         <div class='form-group'>
@@ -67,6 +68,23 @@
                value='{{ $book->purchase_link }}'
            >
            <div class='error'>{{ $errors->first('purchase_link') }}</div>
+        </div>
+
+        <div class='form-group'>
+            <fieldset>
+                <legend>Tags:</legend>
+                @foreach($tags_for_checkboxes as $tag_id => $tag_name)
+                    <label>
+                    <input
+                        type='checkbox'
+                        value='{{ $tag_id }}'
+                        name='tags[]'
+                        {{ (in_array($tag_name, $tags_for_this_book)) ? 'CHECKED' : '' }}
+                    >
+                    {{$tag_name}}
+                    </label>
+                @endforeach
+            </fieldset>
         </div>
 
         <div class='form-instructions'>

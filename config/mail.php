@@ -13,7 +13,7 @@ return [
     |
     | Supported: "smtp", "mail", "sendmail", "mailgun", "mandrill",
     |            "ses", "sparkpost", "log"
-    |
+    |   
     */
 
     'driver' => env('MAIL_DRIVER', 'smtp'),
@@ -55,7 +55,8 @@ return [
     |
     */
 
-    'from' => ['address' => null, 'name' => null],
+    //'from' => ['address' => null, 'name' => null],
+    'from' => array('address' => 'foobooks@gideonho.com', 'name' => 'Foobooks'),
 
     /*
     |--------------------------------------------------------------------------

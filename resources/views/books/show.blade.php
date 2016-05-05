@@ -11,16 +11,29 @@ such as a page specific stylesheets.
 --}}
 
 @section('head')
-    <link href="/css/books/show.css" type='text/css' rel='stylesheet'>
+    <link href="/css/show.css" type='text/css' rel='stylesheet'>
 @stop
 
 
 @section('content')
-    @if($title)
-        <h1>Show book: {{ $title }}</h1>
-    @else
-        <h1>No book chosen</h1>
-    @endif
+
+    <h1 class='truncate'>{{ $book->title }}</h1>
+
+    <h2 class='truncate'>{{ $book->author->first_name }} {{ $book->author->last_name }}</h2>
+
+    <img class='cover' src='{{ $book->cover }}' alt='Cover for {{$book->title}}'>
+
+    <div class='tags'>
+        @foreach($book->tags as $tag)
+            <div class='tag'>{{ $tag->name }}</div>
+        @endforeach
+    </div>
+
+    <h3>Other books by {{ $book->author->first_name }} {{ $book->author->last_name }}</h3>
+    @foreach($otherBooksByThisAuthor as $otherBook)
+        <a href='{{$otherBook['volumeInfo']['infoLink']}}'>{{ $otherBook['volumeInfo']['title'] }}</a><br>
+    @endforeach
+
 @stop
 
 {{--

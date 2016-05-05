@@ -6,8 +6,145 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Book;
+use App\Author;
 
 class PracticeController extends Controller {
+
+    public function getEx25() {
+        # Instantiate a new object from the library we're using
+        $client = new \Google_Client();
+        # Put the name of your application here
+        $client->setApplicationName("Foobooks");
+        # Paste in your API Key
+        $client->setDeveloperKey(\Config::get('apis.google_api_key'));
+        //$client->setDeveloperKey('AIzaSyCOTr6as0kEYPRaf44BxEp_LR7EXEN3hRc');
+        # This library can work with multiple different Google APIs, so here we're specifying we're using the Books API
+        $service = new \Google_Service_Books($client);
+        # Create an array of params for the query; these are the same params we used in the basic example above
+        $optParams = [
+            'q' => 'author:Maya Angelou',
+            'maxResults' => 5,
+        ];
+        # Each API provides resources and methods, usually in a chain. These can be accessed from the service object in the form $service->resource->method(args)
+        $books = $service->volumes->listVolumes('', $optParams);
+        # Output our results to test and make sure it worked
+        dump($books);
+        foreach($books['items'] as $book) {
+            echo $book['volumeInfo']['title'].'<br>';
+        }
+    }
+
+    public function getEx24() {
+        $apiUrl = "https://www.googleapis.com/books/v1/volumes?q=author:maya%20angelou&langRestrict=en&maxResults=5&key=AIzaSyCOTr6as0kEYPRaf44BxEp_LR7EXEN3hRc";
+        $jsonStringResults = file_get_contents($apiUrl);
+        $data = json_decode($jsonStringResults, true);
+        # Show all the data
+        dump($data);
+        # Loop through the data printing just the title for each book
+        foreach($data['items'] as $book) {
+            echo $book['volumeInfo']['title'].'<br>';
+        }
+    }
+
+    public function getEx23(){
+        # Get the current logged in user
+        $user = \Auth::user();
+
+        # If user is not logged in, make them log in
+        if(!$user) return redirect()->guest('login');
+
+        # Grab any book, just to use as an example
+        $book = \App\Book::findOrFail(1);
+
+        # Create an array of data, which will be passed/available in the view
+        $data = array(
+            'user' => $user,
+            'book' => $book,
+        );
+
+        \Mail::send('emails.book-available', $data, function($message) use ($user,$book) {
+
+            $recipient_email = $user->email;
+            $recipient_name  = $user->name;
+            $subject  = 'The book '.$book->title.' is now available on Foobooks';
+
+            $message->to($recipient_email, $recipient_name)->subject($subject);
+
+        });
+
+        echo 'HTML email sent.';
+    }
+
+    public function getEx22() {
+        \Mail::send([], [], function ($message) {
+          $message->to('gideon_ho@hotmail.com')
+            ->subject('Hello World')
+            ->setBody('This is a test message; Testing 123.');
+        });
+        return 'Basic, plain text email sent.';
+    }
+
+    public function getEx21() {
+        $books = \App\Book::with('tags')->get();
+        foreach($books as $book) {
+            echo $book->title.'<br>';
+            foreach($book->tags as $tag) {
+                echo $tag->name.'<br>';
+            }
+            echo '<br>';
+        }
+    }
+
+    public function getEx20(){
+        $book = \App\Book::where('title','=','The Great Gatsby')->first();
+
+        dump($book->tags);
+
+        foreach($book->tags as $tag){
+            echo $tag->name.'<br>';
+        }
+    }
+
+
+
+    public function getEx19() {
+        # Create an author we can associate a book with...
+        $author = new \App\Author;
+        $author->first_name = 'J.K';
+        $author->last_name = 'Rowling';
+        $author->bio_url = 'https://en.wikipedia.org/wiki/J._K._Rowling';
+        $author->birth_year = '1965';
+        $author->save();
+        dump($author->toArray());
+
+        # Create a new books
+        $book = new \App\Book;
+        $book->title = "Harry Potter and the Philosopher's Stone";
+        $book->published = 1997;
+        $book->cover = 'http://prodimage.images-bn.com/pimages/9781582348254_p0_v1_s118x184.jpg';
+        $book->purchase_link = 'http://www.barnesandnoble.com/w/harrius-potter-et-philosophi-lapis-j-k-rowling/1102662272?ean=9781582348254';
+        $book->author()->associate($author); # <--- Associate the author with this book
+        #$book->author_id = $author->id; # <--- Associate the author with this book
+        $book->save();
+        dump($book->toArray());
+    }
+
+    public function getEx18() {
+        # Eager loading
+        $books = \App\Book::with('author')->get();
+        foreach($books as $book) {
+            echo $book->author->first_name.'<br>';
+        }
+    }
+
+    public function getEx17() {
+        $books = \App\Book::get();
+        # Because "author" was not eagerly loaded, it will be dynamically fetched
+        # for each iteration in this loop.
+        foreach($books as $book) {
+            echo $book->author->first_name.'<br>';
+        }
+    }
 
     public function getEx16(){
         $books = \App\Book::orderBy('id','desc')->get();

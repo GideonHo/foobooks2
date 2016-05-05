@@ -23,14 +23,15 @@
         </div>
 
         <div class='form-group'>
-           <label>Author:</label>
-           <input
-               type='text'
-               id='author'
-               name='author'
-               value='{{ old('author','Dr. Seuss') }}'
-           >
-           <div class='error'>{{ $errors->first('author') }}</div>
+            <label for='author_id'>* Author:</label>
+            <select id='author_id' name='author_id'>
+                @foreach($authors_for_dropdown as $author_id => $author_name)
+                     <option value='{{$author_id}}'>
+                         {{$author_name}}
+                     </option>
+                 @endforeach
+            </select>
+            <div class='error'>{{ $errors->first('author_id') }}</div>
         </div>
 
         <div class='form-group'>
@@ -41,7 +42,7 @@
                name='published'
                value='{{ old('published','1960') }}'
            >
-           <div class='error'>{{ $errors->first('Published') }}</div>
+           <div class='error'>{{ $errors->first('published') }}</div>
         </div>
 
         <div class='form-group'>
@@ -64,6 +65,23 @@
                value='{{ old('purchase_link','http://www.barnesandnoble.com/w/green-eggs-and-ham-dr-seuss/1100170349?ean=9780394800165') }}'
            >
            <div class='error'>{{ $errors->first('purchase_link') }}</div>
+        </div>
+
+        <div class='form-group'>
+            <fieldset>
+                <legend>Tags:</legend>
+                @foreach($tags_for_checkboxes as $tag_id => $tag_name)
+                    <label>
+                    <input
+                        type='checkbox'
+                        value='{{ $tag_id }}'
+                        name='tags[]'
+                        {{ $tag_name }}
+                    >
+                    {{$tag_name}}
+                    </label>
+                @endforeach
+            </fieldset>
         </div>
 
         <div class='form-instructions'>
